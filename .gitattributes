@@ -1,0 +1,5 @@
+* text=auto eol=lf
+*.swift text diff=swift
+*.plist text
+*.yml text
+*.sh text eol=lf
