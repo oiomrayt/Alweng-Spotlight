@@ -5,7 +5,7 @@ GitHub Actions автоматически собирает установочн�
 ## 1. Создание репозитория
 
 1. Откройте <https://github.com/new>.
-2. Введите имя `spotlight-english`.
+2. Введите имя `Alweng-Spotlight`.
 3. Выберите **Public**.
 4. Не включайте создание README, `.gitignore` и License — эти файлы уже есть в проекте.
 5. Нажмите **Create repository**.

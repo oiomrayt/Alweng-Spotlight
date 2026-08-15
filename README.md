@@ -1,95 +1,77 @@
 # Spotlight English
 
-Spotlight English is a tiny native macOS menu-bar utility that makes the physical Spotlight key open Spotlight with an English input source selected.
+Spotlight English — небольшая нативная утилита для строки меню macOS. Она делает так, чтобы физическая клавиша Spotlight с лупой открывала системный поиск с выбранной английской раскладкой.
 
-It is useful on multilingual Macs where Spotlight otherwise opens using the input source from the previously focused app.
+## Как это работает
 
-[Русская версия](README.ru.md)
+При нажатии клавиши с лупой, обычно F4, приложение:
 
-## What it does
+1. переназначает системную клавишу Spotlight на свободную F13 встроенной командой Apple `hidutil`;
+2. выбирает указанную английскую раскладку;
+3. ждёт, пока macOS действительно применит изменение;
+4. открывает системное окно Spotlight.
 
-When you press the physical Spotlight key (the magnifying-glass key, usually F4), the app:
+Приложение работает полностью локально: без сети, аналитики, аккаунтов и сторонних runtime-зависимостей.
 
-1. remaps the Apple Spotlight key to an unused F13 key with Apple's built-in `hidutil`;
-2. selects the configured English input source;
-3. waits until macOS has actually applied the change;
-4. opens the system Spotlight window.
+## Требования
 
-The app has no network access, analytics, accounts, third-party runtime dependencies, or background services beyond the app itself and macOS `launchd` when installed with the helper script.
+- macOS 13 или новее;
+- клавиатура Apple с физической клавишей Spotlight (`0x0C00000221`);
+- включённая английская раскладка;
+- разрешение Accessibility для глобального события F13 и отправки Command-Space.
 
-## Requirements
+Обход задержки смены источника ввода в macOS 26 проверен на сценарии `RussianWin → U.S.`.
 
-- macOS 13 or later;
-- an Apple keyboard with the physical Spotlight key (`0x0C00000221`);
-- an enabled English input source;
-- Accessibility permission, required to observe F13 and send Command-Space.
+## Установка готовой версии
 
-The macOS 26 input-source timing workaround has been tested with `RussianWin → U.S.`.
+1. Скачайте `Spotlight-English-v1.0.0.dmg` из Releases.
+2. Откройте образ и перетащите `Spotlight English.app` в Applications.
+3. При первом запуске нажмите приложение с удержанием Control, выберите **Open** и подтвердите запуск.
+4. Разрешите его в **System Settings → Privacy & Security → Accessibility**.
+5. Добавьте приложение в **System Settings → General → Login Items** или установите через скрипт из репозитория.
 
-## Install a release
+Через значок лупы в строке меню можно выбрать английскую раскладку, запустить проверку или завершить приложение.
 
-1. Download `Spotlight-English-v1.0.0.dmg` from Releases.
-2. Open the image and drag `Spotlight English.app` to Applications.
-3. On first launch, Control-click the app, choose **Open**, and confirm.
-4. Allow it in **System Settings → Privacy & Security → Accessibility**.
-5. Add it to **System Settings → General → Login Items**, or use the repository install script.
-
-The menu-bar magnifying-glass icon lets you choose the target English input source, run a test, or quit the app.
-
-## Build from source
-
-Xcode Command Line Tools or Xcode with Swift 5.9+ are required.
+## Сборка
 
 ```bash
-git clone https://github.com/oiomrayt/spotlight-english.git
-cd spotlight-english
+git clone https://github.com/oiomrayt/Alweng-Spotlight.git
+cd Alweng-Spotlight
 make build
 ```
 
-The app will be created at `dist/Spotlight English.app`.
+Результат появится в `dist/Spotlight English.app`.
 
-To build a universal Apple Silicon + Intel binary:
+Универсальная сборка для Apple Silicon и Intel:
 
 ```bash
 make universal
 ```
 
-To build the universal app, DMG, ZIP, and checksums:
+Сборка universal-приложения, DMG, ZIP и контрольных сумм:
 
 ```bash
 make release
 ```
 
-To build and install the app in `/Applications` with a per-user `launchd` login agent:
+Сборка и установка в `/Applications` с автозапуском через пользовательский `launchd`:
 
 ```bash
 make install
 ```
 
-To remove both the app and login agent:
+Удаление:
 
 ```bash
 make uninstall
 ```
 
-## Privacy and security
+## Важные ограничения
 
-- All processing happens locally.
-- The app does not contain networking code.
-- Accessibility is used only for the global F13 event and Command-Space event.
-- Existing `hidutil` mappings are preserved. The app temporarily replaces only the Spotlight-key mapping and restores it when the app exits normally.
-- An abnormal termination may leave the F4→F13 mapping active until the next login or reboot.
+- Обрабатывается именно Apple HID-клавиша Spotlight, а не произвольная F4 сторонней клавиатуры.
+- В настройках macOS открытие Spotlight должно оставаться назначенным на Command-Space.
+- Публичная сборка без предупреждений Gatekeeper потребует сертификат Apple Developer ID и notarization.
 
-See [SECURITY.md](SECURITY.md) for reporting security issues.
+Остальные пользовательские переназначения `hidutil` сохраняются. Приложение временно заменяет только правило для Spotlight и восстанавливает его при штатном завершении.
 
-## Known limitations
-
-- It only handles Apple's physical Spotlight-key HID usage, not arbitrary third-party keyboards.
-- Spotlight must still be assigned to Command-Space in macOS Keyboard Shortcuts.
-- The release workflow creates an ad-hoc-signed artifact by default. Public distribution without Gatekeeper warnings requires an Apple Developer ID certificate and notarization.
-
-See [docs/RELEASING.md](docs/RELEASING.md) for publishing through the GitHub website.
-
-## License
-
-MIT. See [LICENSE](LICENSE).
+Пошаговая публикация через сайт GitHub описана в [docs/RELEASING.ru.md](docs/RELEASING.ru.md).

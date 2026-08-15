@@ -4,7 +4,7 @@ The repository workflow builds release files after a GitHub Release is published
 
 ## First repository upload
 
-1. Create an empty public repository named `spotlight-english` on GitHub. Do not add a README, license, or `.gitignore` on the creation page.
+1. Create an empty public repository named `Alweng-Spotlight` on GitHub. Do not add a README, license, or `.gitignore` on the creation page.
 2. Upload this repository's source files to the `main` branch. Include `.github`, `.gitattributes`, and `.gitignore`; do not upload `.git`, `.build`, `dist`, or `.DS_Store`.
 3. Open the repository's **Actions** tab and confirm that **Build and release** succeeds.
 
